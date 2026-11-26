@@ -1,0 +1,5 @@
+# Every session appends a section to the end of STATUS.md, so two branches
+# always touch the same lines. Union keeps both sides' lines instead of
+# conflicting. GitHub's merge button ignores this; when a PR shows a STATUS.md
+# conflict, merge origin/main into the branch locally (union applies) and push.
+STATUS.md merge=union

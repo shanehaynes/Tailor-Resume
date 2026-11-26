@@ -1,0 +1,43 @@
+# The example resume, built from ledger/example.yaml ids. tests/golden/ is
+# generated from it (see the header of tests/golden/base.resolved.yaml).
+# Uses retired and conflict wording on purpose, like a resume that shipped
+# before the ledger caught it: it tests the template and resolver, and
+# tests/test_checks.py expects `rc truth` to block it. Never truth-checked.
+contact: [phone, email, github, linkedin]
+sections:
+  - heading: Education
+    entries:
+      - education: edu-northgate
+        lines:
+          - {facts: [fellowship, class-rep, gmat], sep: "; "}
+          - {facts: [club-lead, clubs], sep: ", "}
+      - education: edu-brookfield
+        degree_variant: base
+        lines:
+          - {facts: [honors, case-comp], sep: "; "}
+        bullets: [brookfield-capstone/base]
+  - heading: Professional Experience
+    entries:
+      - employer: harborview
+        roles:
+          - role: hv-senior-analyst
+            bullets: [route-optimization/base, dock-scheduling/base, carrier-scorecard/base, carrier-rfp/base]
+          - role: hv-analyst
+            bullets: [inventory-forecast/base, kpi-dashboard/base]
+          - role: hv-coordinator
+            bullets: [cross-dock/base]
+  - heading: Projects
+    bullets: [route-ledger/base]
+  - heading: Additional Information
+    lines:
+      - {label: "Awards", facts: [ops-award]}
+      - {label: "Certifications", facts: [lean-green, cpr]}
+      - label: "Technical Skills"
+        skills:
+          - [Python, SQL, R]
+          - {label: "Optimization", items: [Mixed-integer programming, Demand forecasting, Simulation]}
+          - [Tableau, Power BI, DuckDB]
+          - {label: "Operations", items: [WMS, TMS, Lean]}
+      - {label: "Languages", facts: [english, portuguese]}
+      - {label: "Volunteering", facts: [food-bank]}
+      - {label: "Other Interests", interests: [Trail running, film photography, chess, "project:field-notes"]}

@@ -1,0 +1,94 @@
+{
+ "edu-northgate:title0": [
+  1,
+  1.01
+ ],
+ "edu-northgate:fellowship+class-rep+gmat": [
+  1,
+  0.64
+ ],
+ "edu-northgate:club-lead+clubs": [
+  1,
+  0.58
+ ],
+ "edu-brookfield:title0": [
+  1,
+  1.01
+ ],
+ "edu-brookfield:honors+case-comp": [
+  1,
+  0.61
+ ],
+ "brookfield-capstone/base": [
+  1,
+  0.59
+ ],
+ "harborview:title0": [
+  1,
+  1.01
+ ],
+ "route-optimization/base": [
+  2,
+  0.4
+ ],
+ "dock-scheduling/base": [
+  2,
+  0.5
+ ],
+ "carrier-scorecard/base": [
+  2,
+  0.38
+ ],
+ "carrier-rfp/base": [
+  2,
+  0.5
+ ],
+ "harborview:title1": [
+  1,
+  1.01
+ ],
+ "inventory-forecast/base": [
+  2,
+  0.42
+ ],
+ "kpi-dashboard/base": [
+  2,
+  0.49
+ ],
+ "harborview:title2": [
+  1,
+  1.01
+ ],
+ "cross-dock/base": [
+  1,
+  0.97
+ ],
+ "route-ledger/base": [
+  2,
+  0.47
+ ],
+ "additional:Awards": [
+  1,
+  0.53
+ ],
+ "additional:Certifications": [
+  1,
+  0.46
+ ],
+ "additional:Technical Skills": [
+  2,
+  0.41
+ ],
+ "additional:Languages": [
+  1,
+  0.45
+ ],
+ "additional:Volunteering": [
+  1,
+  0.42
+ ],
+ "additional:Other Interests": [
+  1,
+  0.56
+ ]
+}

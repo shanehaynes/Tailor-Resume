@@ -1,0 +1,125 @@
+# Golden fixture: tests/fixtures/example.selection.yaml resolved against the
+# fictional ledger/example.yaml, at the template's default layout. Contains
+# retired and conflict wording on purpose: it tests the template and resolver,
+# not the ledger. Never truth-checked
+# (docs/decisions/2026-10-04-resolved-selection.md).
+# Regenerate after an intended change to the example, the resolver, or the
+# template: resolve.resolve(selection, ledger.load("ledger/example.yaml"), layout)
+# with this file's layout, then re-record base.lines.json (fit.measure) and
+# base.txt (pdftotext -raw, whitespace collapsed to single spaces).
+layout:
+  font_size: 10.5
+  margin_x: 0.6
+  margin_top: 0.6458
+  margin_bottom: 0.5
+  leading: 2.7
+  entry_gap: 6
+  section_gap: 10
+contact:
+  name: Jamie Rivera
+  items:
+  - text: 'Tel: (555) 010-0142'
+  - text: 'Email: jamie.rivera@example.com'
+    links:
+    - text: jamie.rivera@example.com
+      url: mailto:jamie.rivera@example.com
+  - text: GitHub
+    links:
+    - text: GitHub
+      url: https://github.com/example-jamie
+  - text: LinkedIn
+    links:
+    - text: LinkedIn
+      url: https://www.linkedin.com/in/example-jamie/
+sections:
+- heading: Education
+  entries:
+  - org: Northgate University
+    ref: edu-northgate
+    location: Lakeshore City, ST
+    roles:
+    - title: Master of Business Administration (MBA)
+      dates: '2027'
+      bullets:
+      - id: edu-northgate:fellowship+class-rep+gmat
+        text: Operations Leadership Fellow; First-Year Class Representative; GMAT 710
+      - id: edu-northgate:club-lead+clubs
+        text: Supply Chain Club VP of Events, Data Analytics Club, Outdoors Club
+  - org: Brookfield State University
+    ref: edu-brookfield
+    location: Brookfield, ST
+    roles:
+    - title: Bachelor of Science
+      dates: '2021'
+      detail: Supply Chain Mgmt. - Logistics; Econ
+      bullets:
+      - id: edu-brookfield:honors+case-comp
+        text: Magna Cum Laude; 1st Place, Regional Supply Chain Case Competition
+      - id: brookfield-capstone/base
+        text: 'Capstone: simulated a grocery distributor''s cross-dock in a team of 4'
+- heading: Professional Experience
+  entries:
+  - org: Harborview Freight
+    ref: harborview
+    location: Lakeshore City, ST
+    roles:
+    - title: Senior Operations Analyst
+      dates: Jan 2024 - Jul 2025
+      bullets:
+      - id: route-optimization/base
+        text: Re-planned 140 delivery routes across 6 terminals with a mixed-integer model, cutting empty
+          miles 18% in the first two quarters and saving ~$1.4M in annual fuel
+      - id: dock-scheduling/base
+        text: Built a dock-appointment scheduler in Python and SQL for 4 warehouses; average trailer dwell
+          fell from 4.2 to 2.6 hours, freeing dock-door capacity during the evening peak
+      - id: carrier-scorecard/base
+        text: Designed a carrier scorecard covering 45 contract carriers that now anchors quarterly business
+          reviews with each of them; on-time pickup rose from 87% to 94%
+      - id: carrier-rfp/base
+        text: Ran a lane-level carrier RFP with 22 bidders, working alongside procurement, finance, and
+          terminal managers from scoping to award; contract rates fell 7% on renewed lanes
+    - title: Operations Analyst
+      dates: Jun 2022 - Dec 2023
+      bullets:
+      - id: inventory-forecast/base
+        text: Replaced spreadsheet reorder points with a weekly demand-forecast model for 2,300 SKUs;
+          stockouts fell 22% and inventory carrying cost dropped ~$380K per year
+      - id: kpi-dashboard/base
+        text: Automated a 10-hour weekly operations report into a live Power BI KPI dashboard used daily
+          by 60 supervisors across every terminal, saving ~500 analyst hours per year
+    - title: Logistics Coordinator
+      dates: Aug 2021 - May 2022
+      bullets:
+      - id: cross-dock/base
+        text: Coordinated ~300 inbound loads per week at the cross-dock and cut misrouted pallets 65%
+          with a barcode check
+    descriptor: Regional freight carrier, 1,200 employees
+- heading: Projects
+  bullets:
+  - id: route-ledger/base
+    text: 'Route Ledger: open-source tool in Python and DuckDB that reconciles carrier invoices against
+      shipment records, flagging billing errors that average 3% of invoice value'
+- heading: Additional Information
+  lines:
+  - id: additional:Awards
+    label: Awards
+    text: Harborview Freight Operations Excellence Award, 2024
+  - id: additional:Certifications
+    label: Certifications
+    text: Lean Six Sigma Green Belt, CPR/First Aid
+  - id: additional:Technical Skills
+    label: Technical Skills
+    text: Python, SQL, R; Optimization (Mixed-integer programming, Demand forecasting, Simulation); Tableau,
+      Power BI, DuckDB; Operations (WMS, TMS, Lean)
+  - id: additional:Languages
+    label: Languages
+    text: English (native), Portuguese (professional)
+  - id: additional:Volunteering
+    label: Volunteering
+    text: Logistics lead, community food bank
+  - id: additional:Other Interests
+    label: Other Interests
+    text: Trail running, film photography, chess, Field Notes
+    links:
+    - text: Field Notes
+      url: https://example.org/jamie/

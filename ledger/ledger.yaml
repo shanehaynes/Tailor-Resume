@@ -1,0 +1,57 @@
+# =============================================================================
+# CAREER LEDGER — placeholder
+# The single source of truth for every resume and cover letter. Every bullet
+# that ships must trace to an accomplishment `id` here.
+#
+# This file ships empty. `/onboard` fills it from the owner's existing resumes
+# and their answers, showing a diff before every write. For a complete worked
+# example, see ledger/example.yaml (fictional). Schema v1: ledger/schema.json.
+# Validated by `make check`.
+#
+# Seeded: <YYYY-MM-DD> from <n> sources: <version ids>
+#
+# FACT STATUS
+#   confirmed   - the owner stated it directly in conversation (not just on a resume)
+#   consistent  - identical across every source resume; never independently checked
+#   single      - appears in only one source; needs the owner's confirmation
+#   conflict    - sources make incompatible claims; RESOLVE BEFORE NEXT USE
+#   derived     - computed from other facts; keep the derivation visible
+#   retired     - no longer true or no longer to be claimed; never ships
+#
+# VARIANTS hold wording verbatim (as shipped, or proposed), with the versions
+# that used it. They form the bullet bank. Fit (line count, orphans) is measured
+# by the fit checker, not recorded here.
+#   id      - unique within the accomplishment; selections cite `acc-id/variant-id`
+#   uses    - the fact ids the wording relies on; every number in `text` must
+#             appear in those facts' claims
+#   status  - optional explicit status: proposed | single | conflict | retired.
+#             EFFECTIVE status = worst of this and the used facts' statuses.
+#   groups  - variants that ship together (a two-bullet split, a header + bullets)
+# FACT `display` is the shipped wording of a short fact (education, additional
+# lines) where it differs from `claim`; resumes render display, else claim.
+# DEGREE VARIANTS are alternative renderings of a degree line; "A | B" renders
+# as two lines under the degree title.
+# =============================================================================
+
+schema_version: 1
+
+open_questions: []
+
+resolved_questions: []
+
+contact:
+  name: Your Name
+  phone: "(555) 010-0000"
+  email: you@example.com
+
+education: []
+
+experience: []
+
+projects: []
+
+additional:
+  skills: {}
+  interests: []
+
+version_index: {}

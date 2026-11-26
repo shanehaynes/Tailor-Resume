@@ -1,0 +1,321 @@
+# =============================================================================
+# EXAMPLE CAREER LEDGER — Jamie Rivera (fictional)
+# A complete, invented ledger that exercises every schema feature. Tests build
+# the golden resume from it (tests/fixtures/example.selection.yaml), and it is
+# the shape reference for writing a real ledger (ledger/ledger.yaml). Nothing
+# here describes a real person, employer, or school.
+#
+# Every bullet that ships must trace to an accomplishment `id`. Schema v1:
+# ledger/schema.json. Validate with `uv run rc ledger check ledger/example.yaml`.
+#
+# FACT STATUS
+#   confirmed   - the owner stated it directly in conversation (not just on a resume)
+#   consistent  - identical across every source resume; never independently checked
+#   single      - appears in only one source; needs the owner's confirmation
+#   conflict    - sources make incompatible claims; RESOLVE BEFORE NEXT USE
+#   derived     - computed from other facts; keep the derivation visible
+#   retired     - no longer true or no longer to be claimed; never ships
+#
+# VARIANTS hold wording verbatim (as shipped, or proposed), with the versions
+# that used it. They form the bullet bank. Fit (line count, orphans) is measured
+# by the fit checker, not recorded here.
+#   id      - unique within the accomplishment; selections cite `acc-id/variant-id`
+#   uses    - the fact ids the wording relies on; every number in `text` must
+#             appear in those facts' claims
+#   status  - optional explicit status: proposed | single | conflict | retired.
+#             EFFECTIVE status = worst of this and the used facts' statuses.
+#   groups  - variants that ship together (a two-bullet split, a header + bullets)
+# FACT `display` is the shipped wording of a short fact (education, additional
+# lines) where it differs from `claim`; resumes render display, else claim.
+# DEGREE VARIANTS are alternative renderings of a degree line; "A | B" renders
+# as two lines under the degree title.
+# =============================================================================
+
+schema_version: 1
+
+open_questions:  # answering these is the fastest way to make the ledger safe
+  - id: q-on-time
+    question: >-
+      The carrier scorecard bullet says on-time pickup rose from 87% to 94%; an
+      older resume says 92%. Which is right, and over what period?
+  - id: q-detention
+    question: >-
+      Where does the 31% detention-fee reduction come from (finance report,
+      estimate)? Can it be confirmed?
+    note: "Until answered, dock-scheduling/detention needs an acknowledgment."
+
+resolved_questions:  # history; answers come from the owner
+  - id: q-misroutes
+    resolved: 2026-01-15
+    answer: "Misrouted pallets fell by about half, not 65%."
+    consequence: "Fact misroutes-pct retired; variant cross-dock/half added."
+  - id: q-major-title
+    resolved: 2026-01-15
+    answer: "Official major: Supply Chain Management, Transportation and Logistics concentration; Economics minor."
+    consequence: "Abbreviated degree wording retired (edu-brookfield/base)."
+
+# -----------------------------------------------------------------------------
+contact:
+  name: Jamie Rivera
+  phone: "(555) 010-0142"
+  email: jamie.rivera@example.com
+  location: "Lakeshore City, ST"
+  github: https://github.com/example-jamie
+  linkedin: https://www.linkedin.com/in/example-jamie/
+  blog: https://example.org/jamie/
+  website: https://example.org/jamie/portfolio/
+
+# -----------------------------------------------------------------------------
+education:
+  - id: edu-northgate
+    school: Northgate University
+    location: Lakeshore City, ST
+    degree: Master of Business Administration (MBA)
+    end: 2027  # expected year while the degree is in progress
+    status: confirmed
+    major_official: "Operations Management"
+    second_major_official: "Business Analytics"
+    facts:
+      - {id: expected, claim: "Expected May 2027", status: confirmed}
+      - {id: fellowship, claim: "Operations Leadership Fellow, one of 12 per class", status: confirmed,
+         display: "Operations Leadership Fellow"}
+      - {id: class-rep, claim: "Elected first-year class representative to student government", status: confirmed,
+         display: "First-Year Class Representative"}
+      - {id: gmat, claim: "GMAT 710", status: consistent}
+      - {id: club-lead, claim: "Supply Chain Club VP of Events", status: confirmed}
+      - {id: clubs, claim: "Member of the Data Analytics Club and the Outdoors Club", status: consistent,
+         display: "Data Analytics Club, Outdoors Club"}
+
+  - id: edu-brookfield
+    school: Brookfield State University
+    location: Brookfield, ST
+    degree: Bachelor of Science
+    end: 2021
+    major_official: "Supply Chain Management"
+    emphasis_official: "Transportation and Logistics"
+    content: "Operations research, forecasting, and procurement coursework"
+    degree_variants:
+      - {id: official, text: "Supply Chain Management (Transportation and Logistics); Economics Minor",
+         status: confirmed, tags: [default]}
+      - {id: official-two-line, text: "Supply Chain Management, Transportation and Logistics | Economics Minor",
+         status: confirmed, tags: [layout-alt],
+         note: "Same content. Renders each part on its own line under the degree."}
+      - {id: compact, text: "Supply Chain Management; Economics Minor", status: proposed, tags: [compact],
+         note: "Omits the concentration. Use if the full version forces a wrap."}
+      - {id: base, text: "Supply Chain Mgmt. - Logistics; Econ", used_in: [base], status: retired,
+         note: "Abbreviated; not the official title."}
+    facts:
+      - {id: honors, claim: "Graduated magna cum laude", status: consistent, display: "Magna Cum Laude"}
+      - {id: case-comp, claim: "First place, regional supply chain case competition", status: single,
+         source: "one older resume", display: "1st Place, Regional Supply Chain Case Competition"}
+      - {id: athletics, claim: "Varsity cross country, four years", status: retired,
+         note: "The owner dropped it as no longer relevant."}
+    accomplishments:
+      - id: brookfield-capstone
+        summary: "Senior capstone with a local grocery distributor"
+        facts:
+          - {id: model, claim: "Simulated a grocery distributor's cross-dock in a team of 4", status: confirmed}
+          - {id: adopted, claim: "The distributor adopted the recommended door assignment", status: consistent}
+        variants:
+          - {id: base, text: "Capstone: simulated a grocery distributor's cross-dock in a team of 4",
+             uses: [model], used_in: [base]}
+          - {id: adopted, text: "Capstone: simulated a grocery cross-dock; the client adopted our door assignment",
+             uses: [model, adopted], used_in: [ops-app], tags: [simulation]}
+
+# -----------------------------------------------------------------------------
+experience:
+  - id: harborview
+    company: Harborview Freight
+    descriptor: "Regional freight carrier, 1,200 employees"
+    location: Lakeshore City, ST
+    roles:
+      - id: hv-senior-analyst
+        title: Senior Operations Analyst
+        dates: "Jan 2024 - Jul 2025"
+        accomplishments:
+          - id: route-optimization
+            summary: "Network re-plan of delivery routes with a mixed-integer model"
+            facts:
+              - {id: routes, claim: "Re-planned 140 delivery routes across 6 terminals", status: confirmed}
+              - {id: miles-cut, claim: "Cut empty miles 18% in the first two quarters after rollout",
+                 status: confirmed, source: "fleet telematics report"}
+              - {id: fuel-savings, claim: "~$1.4M in annual fuel savings", status: derived,
+                 derivation: "2.1M empty miles avoided per year x ~$0.67 fuel cost per mile"}
+              - {id: model, claim: "Built the routing model as a mixed-integer program", status: confirmed}
+            variants:
+              - {id: base, text: "Re-planned 140 delivery routes across 6 terminals with a mixed-integer model, cutting empty miles 18% in the first two quarters and saving ~$1.4M in annual fuel",
+                 uses: [routes, miles-cut, fuel-savings, model], used_in: [base], tags: [optimization, cost]}
+              - {id: short, text: "Cut empty miles 18% by re-planning 140 routes across 6 terminals",
+                 uses: [routes, miles-cut], tags: [compact]}
+
+          - id: dock-scheduling
+            facts:
+              - {id: tool, claim: "Built a dock-appointment scheduler in Python and SQL used by 4 warehouses", status: confirmed}
+              - {id: peak, claim: "Freed dock-door capacity during the evening peak", status: consistent}
+              - {id: dwell, claim: "Average trailer dwell fell from 4.2 hours to 2.6 hours", status: confirmed}
+              - {id: detention, claim: "Detention fees down 31% year over year", status: single,
+                 source: "a finance summary the owner saw once"}
+            variants:
+              - {id: base, text: "Built a dock-appointment scheduler in Python and SQL for 4 warehouses; average trailer dwell fell from 4.2 to 2.6 hours, freeing dock-door capacity during the evening peak",
+                 uses: [tool, dwell, peak], used_in: [base], tags: [technical]}
+              - {id: detention, text: "Built a dock-appointment scheduler adopted by 4 warehouses, cutting detention fees 31% year over year",
+                 uses: [tool, detention], tags: [cost]}
+
+          - id: carrier-scorecard
+            facts:
+              - {id: carriers, claim: "Scorecard covers 45 contract carriers", status: consistent}
+              - {id: reviews, claim: "Quarterly business reviews with carriers now run on the scorecard", status: confirmed}
+              - {id: on-time, claim: "On-time pickup rose from 87% to 94%", status: conflict,
+                 note: "An older resume says 92%. See q-on-time."}
+            variants:
+              - {id: base, text: "Designed a carrier scorecard covering 45 contract carriers that now anchors quarterly business reviews with each of them; on-time pickup rose from 87% to 94%",
+                 uses: [carriers, reviews, on-time], used_in: [base]}
+              - {id: reviews, text: "Designed a carrier scorecard for 45 contract carriers that now anchors every quarterly business review with them",
+                 uses: [carriers, reviews], tags: [vendor-management]}
+            gaps: ["No measured outcome that is not in conflict. Resolve q-on-time."]
+
+          - id: carrier-rfp
+            facts:
+              - {id: bids, claim: "Ran a lane-level carrier RFP with 22 bidders", status: confirmed}
+              - {id: partners, claim: "Worked with procurement, finance, and terminal managers from scoping to award", status: confirmed}
+              - {id: rates, claim: "Contract rates fell 7% on renewed lanes", status: consistent}
+            variants:
+              - {id: base, text: "Ran a lane-level carrier RFP with 22 bidders, working alongside procurement, finance, and terminal managers from scoping to award; contract rates fell 7% on renewed lanes",
+                 uses: [bids, partners, rates], used_in: [base], tags: [cross-functional, cost]}
+
+      - id: hv-analyst
+        title: Operations Analyst
+        dates: "Jun 2022 - Dec 2023"
+        note: "HR system title: Operations Analyst II. The owner ships Operations Analyst."
+        accomplishments:
+          - id: inventory-forecast
+            facts:
+              - {id: skus, claim: "Demand-forecast model covers 2,300 SKUs", status: confirmed}
+              - {id: stockouts, claim: "Stockouts fell 22%", status: confirmed}
+              - {id: carrying, claim: "Carrying cost down ~$380K per year", status: consistent}
+            variants:
+              - {id: base, text: "Replaced spreadsheet reorder points with a weekly demand-forecast model for 2,300 SKUs; stockouts fell 22% and inventory carrying cost dropped ~$380K per year",
+                 uses: [skus, stockouts, carrying], used_in: [base], tags: [forecasting]}
+              - {id: stockouts-30, text: "Built a demand-forecast model for 2,300 SKUs that cut stockouts 30%",
+                 uses: [skus, stockouts], status: conflict,
+                 note: "Two older resumes say 30%; the model report says 22%. Do not use."}
+
+          - id: kpi-dashboard
+            facts:
+              - {id: users, claim: "Dashboard used daily by 60 supervisors across every terminal", status: consistent}
+              - {id: report-hours, claim: "Replaced a manual weekly report that took 10 hours to compile", status: confirmed}
+              - {id: hours-saved, claim: "~500 analyst hours saved per year", status: derived,
+                 derivation: "10 hours per week x 50 working weeks"}
+            variants:
+              - {id: base, text: "Automated a 10-hour weekly operations report into a live Power BI KPI dashboard used daily by 60 supervisors across every terminal, saving ~500 analyst hours per year",
+                 uses: [users, report-hours, hours-saved], used_in: [base], tags: [analytics]}
+              - {id: adoption, text: "Launched a live KPI dashboard that every terminal adopted within a quarter",
+                 uses: [users], status: single, note: "Only on one older resume; confirm with the owner."}
+
+      - id: hv-coordinator
+        title: Logistics Coordinator
+        dates: "Aug 2021 - May 2022"
+        accomplishments:
+          - id: cross-dock
+            facts:
+              - {id: volume, claim: "Coordinated about 300 inbound loads per week at the cross-dock", status: consistent}
+              - {id: misroutes, claim: "Cut misrouted pallets by half with a barcode check at the door", status: confirmed}
+              - {id: misroutes-pct, claim: "Misrouted pallets down 65%", status: retired,
+                 note: "Overstated. See q-misroutes."}
+            variants:
+              - {id: base, text: "Coordinated ~300 inbound loads per week at the cross-dock and cut misrouted pallets 65% with a barcode check",
+                 uses: [volume, misroutes-pct], used_in: [base], status: retired, note: "Overstated number."}
+              - {id: half, text: "Coordinated ~300 inbound loads per week at the cross-dock; halved misrouted pallets with a barcode check",
+                 uses: [volume, misroutes]}
+
+  - id: lakeshore-coop  # no descriptor: the name says what it is
+    company: Lakeshore Co-op Market
+    location: Lakeshore City, ST
+    roles:
+      - id: coop-associate
+        title: Inventory Associate (part-time)
+        dates: "May 2019 - Aug 2020"
+        accomplishments:
+          - id: cycle-counts
+            facts:
+              - {id: counts, claim: "Ran weekly cycle counts for the store's dry-goods aisles", status: consistent}
+            variants:
+              - {id: base, text: "Ran weekly cycle counts for the store's dry-goods aisles", uses: [counts], used_in: [base]}
+
+# -----------------------------------------------------------------------------
+projects:
+  - id: route-ledger
+    name: Route Ledger
+    dates: "2024 - present"
+    url: https://example.org/route-ledger/
+    facts:
+      - {id: what, claim: "Open-source tool that reconciles carrier invoices against shipment records", status: confirmed}
+      - {id: stack, claim: "Built in Python and DuckDB with a small web front end", status: confirmed}
+      - {id: errors, claim: "Flags billing errors that average 3% of invoice value", status: consistent}
+      - {id: users, claim: "Used by 9 small shippers", status: single, source: "the owner's estimate"}
+    variants:
+      - {id: base, text: "Route Ledger: open-source tool in Python and DuckDB that reconciles carrier invoices against shipment records, flagging billing errors that average 3% of invoice value",
+         uses: [what, stack, errors], used_in: [base]}
+      - {id: users, text: "Route Ledger: invoice-reconciliation tool now used by 9 small shippers",
+         uses: [what, users], status: proposed}
+      - {id: header, text: "Route Ledger: open-source tool that reconciles carrier invoices against shipment records",
+         uses: [what]}
+      - {id: detail-stack, text: "Built in Python and DuckDB with a small web front end; flags billing errors that average 3% of invoice value",
+         uses: [stack, errors]}
+    groups:
+      - {id: expanded, header: "Route Ledger - freight-invoice reconciliation", variants: [header, detail-stack],
+         note: "Ship together as a two-bullet project block."}
+
+  - id: field-notes
+    name: Field Notes
+    url: https://example.org/jamie/
+    facts:
+      - {id: blog, claim: "Writes a blog on warehouse operations and freight data", status: consistent}
+    variants:
+      - {id: base, text: "Field Notes: a blog on warehouse operations and freight data", uses: [blog]}
+
+  - id: yard-simulator
+    name: Yard Simulator
+    dates: "2023"
+    url: null
+    url_note: "Internal to Harborview Freight; no public link."
+    facts:
+      - {id: what, claim: "Discrete-event simulation of yard moves used to size the spotter fleet", status: confirmed}
+    variants:
+      - {id: base, text: "Yard Simulator: discrete-event simulation of yard moves used to size the spotter fleet",
+         uses: [what]}
+
+# -----------------------------------------------------------------------------
+additional:
+  certifications:
+    - {id: lean-green, claim: "Lean Six Sigma Green Belt", status: confirmed}
+    - {id: cpr, claim: "CPR/First Aid", status: consistent}
+    - {id: forklift, claim: "Forklift operator certification", status: retired, note: "Expired."}
+  lecturing:
+    - {id: safety-talk, claim: "Guest speaker on dock safety, Lakeshore Logistics Association, 2024", status: confirmed,
+       display: "Guest speaker, Lakeshore Logistics Association"}
+  publications:
+    - {id: dwell-post, claim: "\"Appointment windows and trailer dwell,\" Field Notes, 2024", status: consistent}
+  memberships:
+    - {id: freight-network, claim: "Member, Regional Freight Analysts Network", status: consistent}
+  awards:
+    - {id: ops-award, claim: "Harborview Freight Operations Excellence Award, 2024", status: confirmed}
+  volunteering:
+    - {id: food-bank, claim: "Volunteer logistics lead at a community food bank", status: consistent,
+       display: "Logistics lead, community food bank"}
+  languages:
+    - {id: english, claim: "English (native)", status: consistent}
+    - {id: portuguese, claim: "Portuguese (professional working proficiency)", status: consistent,
+       display: "Portuguese (professional)"}
+  skills:  # the inventory; each version selects and labels from it
+    analytics: [Python, SQL, R]
+    optimization: [Mixed-integer programming, Demand forecasting, Simulation]
+    bi: [Tableau, Power BI, DuckDB]
+    operations: [WMS, TMS, Lean]
+    familiar_only: [Julia, Gurobi]  # convention: course-only; never selected
+  interests: [Trail running, film photography, chess]
+
+# -----------------------------------------------------------------------------
+version_index:  # source version -> file it came from
+  base: Jamie_Rivera_Resume.pdf
+  ops-app: Jamie_Rivera_Resume_Operations.docx

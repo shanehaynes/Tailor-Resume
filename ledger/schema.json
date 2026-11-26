@@ -1,0 +1,559 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Tailor-Resume career ledger, v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "open_questions",
+    "resolved_questions",
+    "contact",
+    "education",
+    "experience",
+    "projects",
+    "additional",
+    "version_index"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "open_questions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/open_question"
+      }
+    },
+    "resolved_questions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/resolved_question"
+      }
+    },
+    "contact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "phone",
+        "email"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "github": {
+          "$ref": "#/$defs/url"
+        },
+        "linkedin": {
+          "$ref": "#/$defs/url"
+        },
+        "blog": {
+          "$ref": "#/$defs/url"
+        },
+        "website": {
+          "$ref": "#/$defs/url"
+        },
+        "location": {
+          "type": "string"
+        }
+      }
+    },
+    "education": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/education"
+      }
+    },
+    "experience": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/employer"
+      }
+    },
+    "projects": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/project"
+      }
+    },
+    "additional": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "lecturing": {
+          "$ref": "#/$defs/facts"
+        },
+        "certifications": {
+          "$ref": "#/$defs/facts"
+        },
+        "languages": {
+          "$ref": "#/$defs/facts"
+        },
+        "awards": {
+          "$ref": "#/$defs/facts"
+        },
+        "publications": {
+          "$ref": "#/$defs/facts"
+        },
+        "volunteering": {
+          "$ref": "#/$defs/facts"
+        },
+        "memberships": {
+          "$ref": "#/$defs/facts"
+        },
+        "skills": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/strings"
+          }
+        },
+        "interests": {
+          "$ref": "#/$defs/strings"
+        }
+      }
+    },
+    "version_index": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "ids": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/id"
+      },
+      "uniqueItems": true
+    },
+    "url": {
+      "type": "string",
+      "pattern": "^https://"
+    },
+    "strings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "date": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "fact_status": {
+      "enum": [
+        "confirmed",
+        "consistent",
+        "single",
+        "conflict",
+        "derived",
+        "retired"
+      ]
+    },
+    "variant_status": {
+      "enum": [
+        "proposed",
+        "single",
+        "conflict",
+        "retired"
+      ]
+    },
+    "open_question": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "question"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "question": {
+          "type": "string"
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "resolved_question": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "resolved",
+        "answer"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "resolved": {
+          "$ref": "#/$defs/date"
+        },
+        "answer": {
+          "type": "string"
+        },
+        "consequence": {
+          "type": "string"
+        }
+      }
+    },
+    "fact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "claim",
+        "status"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "claim": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/fact_status"
+        },
+        "note": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "derivation": {
+          "type": "string"
+        },
+        "display": {
+          "type": "string"
+        }
+      },
+      "if": {
+        "properties": {
+          "status": {
+            "const": "derived"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "derivation"
+        ]
+      }
+    },
+    "facts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/fact"
+      }
+    },
+    "variant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "text",
+        "uses"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "text": {
+          "type": "string"
+        },
+        "uses": {
+          "$ref": "#/$defs/ids"
+        },
+        "used_in": {
+          "$ref": "#/$defs/ids"
+        },
+        "tags": {
+          "$ref": "#/$defs/ids"
+        },
+        "status": {
+          "$ref": "#/$defs/variant_status"
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "group": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "variants"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "variants": {
+          "$ref": "#/$defs/ids"
+        },
+        "header": {
+          "type": "string"
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "accomplishment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "facts",
+        "variants"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "summary": {
+          "type": "string"
+        },
+        "facts": {
+          "$ref": "#/$defs/facts"
+        },
+        "variants": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/variant"
+          }
+        },
+        "groups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/group"
+          }
+        },
+        "gaps": {
+          "$ref": "#/$defs/strings"
+        }
+      }
+    },
+    "degree_variant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "text",
+        "status"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "text": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "confirmed",
+            "proposed",
+            "retired"
+          ]
+        },
+        "used_in": {
+          "$ref": "#/$defs/ids"
+        },
+        "tags": {
+          "$ref": "#/$defs/ids"
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "education": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "school",
+        "location",
+        "degree",
+        "end",
+        "facts"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "school": {
+          "type": "string"
+        },
+        "location": {
+          "type": "string"
+        },
+        "degree": {
+          "type": "string"
+        },
+        "end": {
+          "type": "integer"
+        },
+        "major_official": {
+          "type": "string"
+        },
+        "emphasis_official": {
+          "type": "string"
+        },
+        "second_major_official": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "degree_variants": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/degree_variant"
+          }
+        },
+        "status": {
+          "$ref": "#/$defs/fact_status"
+        },
+        "facts": {
+          "$ref": "#/$defs/facts"
+        },
+        "accomplishments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/accomplishment"
+          }
+        }
+      }
+    },
+    "role": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "dates",
+        "accomplishments"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "title": {
+          "type": "string"
+        },
+        "dates": {
+          "type": "string"
+        },
+        "note": {
+          "type": "string"
+        },
+        "accomplishments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/accomplishment"
+          }
+        }
+      }
+    },
+    "employer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "company",
+        "location",
+        "roles"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "company": {
+          "type": "string"
+        },
+        "descriptor": {
+          "type": "string"
+        },
+        "location": {
+          "type": "string"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/role"
+          }
+        }
+      }
+    },
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "facts",
+        "variants"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "name": {
+          "type": "string"
+        },
+        "dates": {
+          "type": "string"
+        },
+        "url": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/url"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "url_note": {
+          "type": "string"
+        },
+        "note": {
+          "type": "string"
+        },
+        "facts": {
+          "$ref": "#/$defs/facts"
+        },
+        "variants": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/variant"
+          }
+        },
+        "groups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/group"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,36 @@
+schema_version: 1
+open_questions: [{id: q-open, question: "Was the crew 6 or 7 people?"}]
+resolved_questions: [{id: q-done, resolved: 2026-10-04, answer: "Yes."}]
+contact: {name: Test Person, phone: "(555) 555-0100", email: test@example.com}
+education:
+  - id: edu-x
+    school: X University
+    location: Somewhere
+    degree: BS
+    end: 2024
+    facts: [{id: honor, claim: "Honor", status: consistent}]
+experience:
+  - id: acme
+    company: Acme
+    location: Somewhere
+    roles:
+      - id: acme-dev
+        title: Developer
+        dates: "2024 - 2025"
+        accomplishments:
+          - id: widget
+            facts:
+              - {id: crew-6, claim: "Led a crew of 6", status: confirmed}
+              - {id: users, claim: "Used by 2,400 people over three years", status: consistent}
+              - {id: savings, claim: "Saved $1.8M", status: single, source: x}
+              - {id: bad, claim: "Cut costs 40%", status: conflict}
+            variants:
+              - {id: clear, text: "Led a crew of 6 to ship to 2,400 users over 3 years", uses: [crew-6, users]}
+              - {id: needs-ack, text: "Saved $1.8M with a crew of six", uses: [savings, crew-6]}
+              - {id: proposed, text: "Led a crew of 6", uses: [crew-6], status: proposed}
+              - {id: blocked, text: "Cut costs 40%", uses: [bad]}
+              - {id: retired, text: "Saved $9.9M", uses: [savings], status: retired}
+            groups: [{id: pair, variants: [clear, proposed]}]
+projects: []
+additional: {}
+version_index: {}
